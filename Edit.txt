@@ -1,1 +1,403 @@
+------------navbar------
+
+
+import React from "react";
+import { Link } from "react-router-dom";
+
+export default function Navbar() {
+  return (
+    <div>
+        <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div className="container-fluid">
+          <Link className="navbar-brand" to="/">
+          CRUD Application
+          </Link>
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+
+          <Link className="btn btn-outline-light" to="/addemp">
+            Add Employee
+          </Link>
+        </div>
+      </nav>
+    </div>
+  );
+}
+-----------------home----
+
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Link, useParams } from "react-router-dom";
+
+export default function Home() {
+  const [employee, setemp] = useState([]);
+
+  useEffect(() => {
+    loademp();
+  }, []);
+
+  const loademp = async () => {
+    const result = await axios.get("http://localhost:8080/Employee/getAll");
+    setemp(result.data);
+  };
+
+  return (
+    <div className="container">
+      <div className="py-4">
+        <table className="table table-striped table-hover table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {employee.map((employee, index) => (
+              <tr key={index}>
+                <td>{employee.name}</td>
+                <td>
+                  <Link
+                    className="btn btn-primary mx-2"
+                    to={`/viewemp/${employee.id}`}
+                  >
+                    View
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+-------adddemp----
+
+import axios from "axios";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
+export default function Addemp() {
+  let navigate = useNavigate();
+
+  const [employee, setemp] = useState({
+    name: "",
+    email: "",
+    mobile: "",
+    password: "",
+    country: "",
+  });
+
+  const { name, email , mobile, password ,country} = employee;
+
+  const onInputChange = (e) => {
+    setemp({ ...employee, [e.target.name]: e.target.value });
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    await axios.post("http://localhost:8080/Employee/save", employee);
+    navigate("/");
+  };
+
+  return (
+    <div className="container">
+      <div className="row">
+        <div className="col-md-6 offset-md-3 border rounded p-4 mt-2 shadow">
+          <h2 className="text-center m-4">Register Employee</h2>
+
+          <form onSubmit={(e) => onSubmit(e)}>
+            <div className="mb-3">
+              <label htmlFor="Name" className="form-label">
+                Name
+              </label>
+              <input
+                type={"text"}
+                className="form-control"
+                placeholder="Enter your name"
+                name="name"
+                value={name}
+                onChange={(e) => onInputChange(e)}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="Email" className="form-label">
+                Email
+              </label>
+              <input
+                type={"text"}
+                className="form-control"
+                placeholder="Enter your email"
+                name="email"
+                value={email}
+                onChange={(e) => onInputChange(e)}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="Mobile" className="form-label">
+                Mobile
+              </label>
+              <input
+                type={"text"}
+                className="form-control"
+                placeholder="Enter your mobile"
+                name="mobile"
+                value={mobile}
+                onChange={(e) => onInputChange(e)}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="password" className="form-label">
+                Password
+              </label>
+              <input
+                type={"text"}
+                className="form-control"
+                placeholder="Enter your password"
+                name="password"
+                value={password}
+                onChange={(e) => onInputChange(e)}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="country" className="form-label">
+                Country
+              </label>
+              <input
+                type={"text"}
+                className="form-control"
+                placeholder="Enter your country"
+                name="country"
+                value={country}
+                onChange={(e) => onInputChange(e)}
+              />
+            </div>
+            <button type="submit" className="btn btn-outline-primary">
+              Submit
+            </button>
+            <Link className="btn btn-outline-danger mx-2" to="/">
+              Cancel
+            </Link>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+}
+----view---
+
+import axios from "axios";
+import React, { useEffect,useState } from "react";
+import { Link, useParams } from "react-router-dom";
+
+export default function Viewemp() {
+  const [employee, setemp] = useState({
+    name: "",
+    email: "",
+    mobile: "",
+    password: "",
+    country: "",
+  });
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    loademp();
+  }, []);
+  const deleteemp = async (id) => {
+    await axios.delete(`http://localhost:8080/Employee/delete/${id}`);
+    loademp();
+  };
+
+  const loademp = async () => {
+    const result = await axios.get(`http://localhost:8080/Employee/get/${id}`);
+    setemp(result.data);
+  };
+
+  return (
+    <div className="container">
+      <div className="row">
+        <div className="col-md-6 offset-md-3 border rounded p-4 mt-2 shadow">
+          <h2 className="text-center m-4">Employee Details</h2>
+
+          <div className="card">
+            <div className="card-header">
+              Details of employee id : {employee.id}
+              <ul className="list-group list-group-flush">
+                <li className="list-group-item">
+                  <b>Name:</b>
+                  {employee.name}
+                </li>
+                <li className="list-group-item">
+                  <b>Email:</b>
+                  {employee.email}
+                </li>
+                <li className="list-group-item">
+                  <b>Mobile:</b>
+                  {employee.mobile}
+                </li>
+                <li className="list-group-item">
+                  <b>Password:</b>
+                  {employee.password}
+                </li>
+                <li className="list-group-item">
+                  <b>country:</b>
+                  {employee.country}
+                </li>
+              </ul>
+            </div>
+          </div>
+          <Link className="btn btn-primary my-2" to={"/"}>
+            Back to Home
+          </Link>
+          <Link
+                    className="btn btn-secondary mx-2"
+                    to={`/editemp/${employee.id}`}
+                  >
+                    Edit
+                  </Link>
+                  <Link
+                    className="btn btn-danger mx-2" to={"/"}
+                    onClick={() => deleteemp(employee.id)}
+                  >
+                    Delete
+                  </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+------edit-----
+
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+
+export default function Editemp() {
+  let navigate = useNavigate();
+
+  const { id } = useParams();
+
+  const [employee, setemp] = useState({
+    name: "",
+    email: "",
+    mobile: "",
+    password: "",
+    country: "",
+  });
+
+  const { name, email , mobile, password ,country} = employee;
+
+  const onInputChange = (e) => {
+    setemp({ ...employee, [e.target.name]: e.target.value });
+  };
+
+  useEffect(() => {
+    loademp();
+  }, []);
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    await axios.put(`http://localhost:8080/Employee/updateEmp/${id}`, employee);
+    navigate("/");
+  };
+
+  const loademp = async () => {
+    const result = await axios.get(`http://localhost:8080/Employee/get/${id}`);
+    setemp(result.data);
+  };
+
+  return (
+    <div className="container">
+      <div className="row">
+        <div className="col-md-6 offset-md-3 border rounded p-4 mt-2 shadow">
+          <h2 className="text-center m-4">Edit Employee</h2>
+
+          <form onSubmit={(e) => onSubmit(e)}>
+            <div className="mb-3">
+              <label htmlFor="Name" className="form-label">
+                Name
+              </label>
+              <input
+                type={"text"}
+                className="form-control"
+                placeholder="Enter your name"
+                name="name"
+                value={name}
+                onChange={(e) => onInputChange(e)}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="Email" className="form-label">
+                Email
+              </label>
+              <input
+                type={"text"}
+                className="form-control"
+                placeholder="Enter your email"
+                name="email"
+                value={email}
+                onChange={(e) => onInputChange(e)}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="Mobile" className="form-label">
+                Mobile
+              </label>
+              <input
+                type={"text"}
+                className="form-control"
+                placeholder="Enter your mobile"
+                name="mobile"
+                value={mobile}
+                onChange={(e) => onInputChange(e)}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="password" className="form-label">
+                Password
+              </label>
+              <input
+                type={"text"}
+                className="form-control"
+                placeholder="Enter your password"
+                name="password"
+                value={password}
+                onChange={(e) => onInputChange(e)}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="country" className="form-label">
+                Country
+              </label>
+              <input
+                type={"text"}
+                className="form-control"
+                placeholder="Enter your country"
+                name="country"
+                value={country}
+                onChange={(e) => onInputChange(e)}
+              />
+            </div>
+            <button type="submit" className="btn btn-outline-primary">
+              Submit
+            </button>
+            <Link className="btn btn-outline-danger mx-2" to="/">
+              Cancel
+            </Link>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+}
 

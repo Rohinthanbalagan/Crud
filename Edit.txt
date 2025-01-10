@@ -375,6 +375,7 @@ export default function Editemp() {
                 onChange={(e) => onInputChange(e)}
               />
             </div>
+
             <div className="mb-3">
               <label htmlFor="country" className="form-label">
                 Country
@@ -400,4 +401,735 @@ export default function Editemp() {
     </div>
   );
 }
+--------navbar. css------
 
+/* General Navbar Styling */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #007bff;
+  padding: 1rem 2rem;
+  color: white;
+}
+
+/* Branding Styles */
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: white;
+}
+
+/* Toggler Button for Small Screens */
+.navbar-toggler {
+  display: none; /* Hide for now, can be implemented for responsiveness */
+}
+
+/* Add Employee Button */
+.navbar .btn {
+  padding: 0.5rem 1rem;
+  border: 2px solid white;
+  background: transparent;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.navbar .btn:hover {
+  background-color: white;
+  color: #007bff;
+  border: 2px solid #007bff;
+}
+
+/* Mobile Styling (Optional) */
+@media (max-width: 768px) {
+  .navbar-toggler {
+    display: block;
+  }
+
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+--------navbar ----
+import React from "react";
+import { Link } from "react-router-dom";
+import "./Navbar.css"; // Import the CSS file
+
+export default function Navbar() {
+  return (
+    <div>
+      <nav className="navbar">
+        <Link className="navbar-brand" to="/">
+          CRUD Application
+        </Link>
+        <button className="navbar-toggler" aria-label="Toggle navigation">
+          ☰
+        </button>
+        <Link className="btn" to="/addemp">
+          Add Employee
+        </Link>
+      </nav>
+    </div>
+  );
+}
+------home. css----+++
+/* General Container Styling */
+.container {
+  width: 90%;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+/* Table Styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+thead {
+  background-color: #007bff;
+  color: white;
+}
+
+thead th {
+  padding: 10px;
+  text-align: left;
+}
+
+tbody tr {
+  border-bottom: 1px solid #ddd;
+}
+
+tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+tbody td {
+  padding: 10px;
+}
+
+/* Button Styling */
+.btn {
+  padding: 8px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
+.mx-2 {
+  margin-left: 8px;
+  margin-right: 8px;
+}
+-----home. js------
+
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import "./Home.css"; // Import the CSS file
+
+export default function Home() {
+  const [employee, setemp] = useState([]);
+
+  useEffect(() => {
+    loademp();
+  }, []);
+
+  const loademp = async () => {
+    try {
+      const result = await axios.get("http://localhost:8080/Employee/getAll");
+      setemp(result.data);
+    } catch (error) {
+      console.error("Error fetching employee data:", error);
+    }
+  };
+
+  return (
+    <div className="container">
+      <h2>Employee List</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {employee.map((emp, index) => (
+            <tr key={index}>
+              <td>{emp.name}</td>
+              <td>
+                <Link className="btn mx-2" to={`/viewemp/${emp.id}`}>
+                  View
+                </Link>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+----addemp. css-----
+/* Container styling */
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+/* Card styling */
+.form-container {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-top: 20px;
+  background-color: #fff;
+}
+
+/* Header styling */
+.form-header {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Form input styling */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #555;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.form-group input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Button styling */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+}
+
+button {
+  padding: 10px 15px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button[type="submit"] {
+  background-color: #007bff;
+  color: white;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+button.cancel {
+  background-color: #dc3545;
+  color: white;
+}
+
+button.cancel:hover {
+  background-color: #a71d2a;
+}
+-----addemp. js-----
+import axios from "axios";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "./Addemp.css"; // Import the CSS file
+
+export default function Addemp() {
+  let navigate = useNavigate();
+
+  const [employee, setemp] = useState({
+    name: "",
+    email: "",
+    mobile: "",
+    password: "",
+    country: "",
+  });
+
+  const { name, email, mobile, password, country } = employee;
+
+  const onInputChange = (e) => {
+    setemp({ ...employee, [e.target.name]: e.target.value });
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    await axios.post("http://localhost:8080/Employee/save", employee);
+    navigate("/");
+  };
+
+  return (
+    <div className="container">
+      <div className="form-container">
+        <h2 className="form-header">Register Employee</h2>
+        <form onSubmit={(e) => onSubmit(e)}>
+          <div className="form-group">
+            <label htmlFor="name">Name</label>
+            <input
+              type="text"
+              placeholder="Enter your name"
+              name="name"
+              value={name}
+              onChange={(e) => onInputChange(e)}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input
+              type="text"
+              placeholder="Enter your email"
+              name="email"
+              value={email}
+              onChange={(e) => onInputChange(e)}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="mobile">Mobile</label>
+            <input
+              type="text"
+              placeholder="Enter your mobile"
+              name="mobile"
+              value={mobile}
+              onChange={(e) => onInputChange(e)}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="text"
+              placeholder="Enter your password"
+              name="password"
+              value={password}
+              onChange={(e) => onInputChange(e)}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="country">Country</label>
+            <input
+              type="text"
+              placeholder="Enter your country"
+              name="country"
+              value={country}
+              onChange={(e) => onInputChange(e)}
+            />
+          </div>
+          <div className="button-group">
+            <button type="submit">Submit</button>
+            <Link to="/" className="cancel">
+              Cancel
+            </Link>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+------view. css-----
+
+/* General container styling */
+.container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+/* Card styling */
+.card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  overflow: hidden;
+}
+
+.card-header {
+  background-color: #007bff;
+  color: white;
+  padding: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.card-body {
+  padding: 15px;
+}
+
+.list-group {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list-group-item {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+  color: #333;
+}
+
+.list-group-item:last-child {
+  border-bottom: none;
+}
+
+.list-group-item b {
+  margin-right: 5px;
+  color: #555;
+}
+
+/* Button styling */
+.button-group {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+button, a {
+  padding: 10px 15px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button.primary, a.primary {
+  background-color: #007bff;
+}
+
+button.primary:hover, a.primary:hover {
+  background-color: #0056b3;
+}
+
+button.secondary, a.secondary {
+  background-color: #6c757d;
+}
+
+button.secondary:hover, a.secondary:hover {
+  background-color: #5a6268;
+}
+
+button.danger, a.danger {
+  background-color: #dc3545;
+}
+
+button.danger:hover, a.danger:hover {
+  background-color: #c82333;
+}
+----view.js-----
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import "./Viewemp.css"; // Import the CSS file
+
+export default function Viewemp() {
+  const [employee, setemp] = useState({
+    name: "",
+    email: "",
+    mobile: "",
+    password: "",
+    country: "",
+  });
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    loademp();
+  }, []);
+
+  const deleteemp = async (id) => {
+    await axios.delete(`http://localhost:8080/Employee/delete/${id}`);
+  };
+
+  const loademp = async () => {
+    const result = await axios.get(`http://localhost:8080/Employee/get/${id}`);
+    setemp(result.data);
+  };
+
+  return (
+    <div className="container">
+      <div className="card">
+        <div className="card-header">
+          Details of Employee ID: {employee.id}
+        </div>
+        <div className="card-body">
+          <ul className="list-group">
+            <li className="list-group-item">
+              <b>Name:</b> {employee.name}
+            </li>
+            <li className="list-group-item">
+              <b>Email:</b> {employee.email}
+            </li>
+            <li className="list-group-item">
+              <b>Mobile:</b> {employee.mobile}
+            </li>
+            <li className="list-group-item">
+              <b>Password:</b> {employee.password}
+            </li>
+            <li className="list-group-item">
+              <b>Country:</b> {employee.country}
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div className="button-group">
+        <Link to="/" className="primary">
+          Back to Home
+        </Link>
+        <Link to={`/editemp/${employee.id}`} className="secondary">
+          Edit
+        </Link>
+        <a href="/" className="danger" onClick={() => deleteemp(employee.id)}>
+          Delete
+        </a>
+      </div>
+    </div>
+  );
+}
+------edit. cas----
+/* General container styling */
+.container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+/* Form container styling */
+.form-container {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Form fields styling */
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Button styling */
+button, a {
+  display: inline-block;
+  padding: 10px 15px;
+  font-size: 14px;
+  text-decoration: none;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+button.submit {
+  background-color: #007bff;
+  color: white;
+}
+
+button.submit:hover {
+  background-color: #0056b3;
+}
+
+a.cancel {
+  background-color: #dc3545;
+  color: white;
+}
+
+a.cancel:hover {
+  background-color: #c82333;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+}
+
+----edit. js----
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import "./Editemp.css"; // Import the CSS file
+
+export default function Editemp() {
+  let navigate = useNavigate();
+  const { id } = useParams();
+
+  const [employee, setemp] = useState({
+    name: "",
+    email: "",
+    mobile: "",
+    password: "",
+    country: "",
+  });
+
+  const { name, email, mobile, password, country } = employee;
+
+  const onInputChange = (e) => {
+    setemp({ ...employee, [e.target.name]: e.target.value });
+  };
+
+  useEffect(() => {
+    loademp();
+  }, []);
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    await axios.put(`http://localhost:8080/Employee/updateEmp/${id}`, employee);
+    navigate("/");
+  };
+
+  const loademp = async () => {
+    const result = await axios.get(`http://localhost:8080/Employee/get/${id}`);
+    setemp(result.data);
+  };
+
+  return (
+    <div className="container">
+      <div className="form-container">
+        <h2 className="form-header">Edit Employee</h2>
+
+        <form onSubmit={(e) => onSubmit(e)}>
+          <div className="form-group">
+            <label htmlFor="Name">Name</label>
+            <input
+              type="text"
+              placeholder="Enter your name"
+              name="name"
+              value={name}
+              onChange={(e) => onInputChange(e)}
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="Email">Email</label>
+            <input
+              type="text"
+              placeholder="Enter your email"
+              name="email"
+              value={email}
+              onChange={(e) => onInputChange(e)}
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="Mobile">Mobile</label>
+            <input
+              type="text"
+              placeholder="Enter your mobile"
+              name="mobile"
+              value={mobile}
+              onChange={(e) => onInputChange(e)}
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="text"
+              placeholder="Enter your password"
+              name="password"
+              value={password}
+              onChange={(e) => onInputChange(e)}
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="country">Country</label>
+            <input
+              type="text"
+              placeholder="Enter your country"
+              name="country"
+              value={country}
+              onChange={(e) => onInputChange(e)}
+            />
+          </div>
+
+          <div className="button-group">
+            <button type="submit" className="submit">
+              Submit
+            </button>
+            <Link to="/" className="cancel">
+              Cancel
+            </Link>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}

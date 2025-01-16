@@ -679,3 +679,88 @@ export default function Viewemp() {
     </div>
   );
 }
+
+
+Edit.css---------
+
+/* General container styling */
+.container {
+  margin-top: 50px;
+}
+
+/* Styling for the form container */
+.border {
+  border-radius: 10px;
+  background-color: #f8f9fa;
+}
+
+/* Heading styling */
+h2 {
+  font-weight: bold;
+  color: #333;
+}
+
+/* Form label styling */
+.form-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+}
+
+/* Input fields styling */
+.form-control {
+  border-radius: 5px;
+  border: 1px solid #ced4da;
+  box-shadow: none;
+  transition: all 0.3s ease-in-out;
+}
+
+.form-control:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Button styling */
+.btn-outline-primary {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.btn-outline-primary:hover {
+  background-color: #0056b3;
+  color: #fff;
+}
+
+.btn-outline-danger {
+  background-color: #dc3545;
+  color: #fff;
+  border-color: #dc3545;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.btn-outline-danger:hover {
+  background-color: #a71d2a;
+  color: #fff;
+}
+
+/* Adding some padding for the form elements */
+.mb-3 {
+  margin-bottom: 20px;
+}
+
+/* Shadow for the form container */
+.shadow {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
+  .container {
+    margin-top: 20px;
+  }
+
+  h2 {
+    font-size: 18px;
+  }

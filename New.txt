@@ -471,3 +471,211 @@ export default function Addemp() {
     </div>
   );
 }
+view.csss.....
+/* Container Styling */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Card Styling */
+.card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.card-header {
+  background-color: #007bff;
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 600;
+  border-radius: 8px 8px 0 0;
+  padding: 15px;
+}
+
+/* List Group */
+.list-group-item {
+  padding: 12px 20px;
+  font-size: 1.1rem;
+  border: 1px solid #f0f0f0;
+  background-color: #f9f9f9;
+}
+
+.list-group-item b {
+  color: #007bff;
+}
+
+.list-group-item:hover {
+  background-color: #f0f8ff;
+}
+
+/* Button Styling */
+.btn {
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+}
+
+/* Primary Button */
+.btn-primary {
+  background-color: #007bff;
+  border: 2px solid #007bff;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+  cursor: pointer;
+}
+
+/* Secondary Button */
+.btn-secondary {
+  background-color: #6c757d;
+  border: 2px solid #6c757d;
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+  border-color: #5a6268;
+  cursor: pointer;
+}
+
+/* Danger Button */
+.btn-danger {
+  background-color: #dc3545;
+  border: 2px solid #dc3545;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  border-color: #c82333;
+  cursor: pointer;
+}
+
+/* Spacing Between Buttons */
+.mx-2 {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+/* Padding Around Buttons */
+.my-2 {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+/* Heading Styling */
+h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .col-md-6 {
+    margin-top: 30px;
+  }
+
+  .card {
+    padding: 15px;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .btn {
+    font-size: 0.9rem;
+  }
+}
+view.js.......
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import axios from "axios";
+import './Viewemp.css'; // Import the custom CSS file
+
+export default function Viewemp() {
+  const [employee, setemp] = useState({
+    name: "",
+    email: "",
+    mobile: "",
+    password: "",
+    country: "",
+  });
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    loademp();
+  }, []);
+  
+  const deleteemp = async (id) => {
+    await axios.delete(`http://localhost:8080/Employee/delete/${id}`);
+    loademp();
+  };
+
+  const loademp = async () => {
+    const result = await axios.get(`http://localhost:8080/Employee/get/${id}`);
+    setemp(result.data);
+  };
+
+  return (
+    <div className="container">
+      <div className="row">
+        <div className="col-md-6 offset-md-3 border rounded p-4 mt-2 shadow">
+          <h2 className="text-center m-4">Employee Details</h2>
+
+          <div className="card">
+            <div className="card-header">
+              Details of employee id : {employee.id}
+            </div>
+            <ul className="list-group list-group-flush">
+              <li className="list-group-item">
+                <b>Name:</b> {employee.name}
+              </li>
+              <li className="list-group-item">
+                <b>Email:</b> {employee.email}
+              </li>
+              <li className="list-group-item">
+                <b>Mobile:</b> {employee.mobile}
+              </li>
+              <li className="list-group-item">
+                <b>Password:</b> {employee.password}
+              </li>
+              <li className="list-group-item">
+                <b>Country:</b> {employee.country}
+              </li>
+            </ul>
+          </div>
+          <Link className="btn btn-primary my-2" to={"/"}>
+            Back to Home
+          </Link>
+          <Link
+            className="btn btn-secondary mx-2"
+            to={`/editemp/${employee.id}`}
+          >
+            Edit
+          </Link>
+          <Link
+            className="btn btn-danger mx-2"
+            to={"/"}
+            onClick={() => deleteemp(employee.id)}
+          >
+            Delete
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}

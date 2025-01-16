@@ -241,3 +241,233 @@ export default function Home() {
     </div>
   );
 }
+addemp.......
+/* Container Styling */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Form Card Styling */
+.col-md-6 {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.border {
+  border: 1px solid #ddd;
+}
+
+.p-4 {
+  padding: 30px;
+}
+
+/* Header Styling */
+h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+}
+
+/* Input Field Styling */
+.form-control {
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Label Styling */
+.form-label {
+  font-weight: 600;
+  color: #555;
+}
+
+/* Button Styling */
+.btn {
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+}
+
+/* Submit Button */
+.btn-outline-primary {
+  background-color: #007bff;
+  color: #fff;
+  border: 2px solid #007bff;
+}
+
+.btn-outline-primary:hover {
+  background-color: #0056b3;
+  border: 2px solid #0056b3;
+  cursor: pointer;
+}
+
+/* Cancel Button */
+.btn-outline-danger {
+  color: #dc3545;
+  border: 2px solid #dc3545;
+}
+
+.btn-outline-danger:hover {
+  background-color: #dc3545;
+  color: #fff;
+  border: 2px solid #dc3545;
+  cursor: pointer;
+}
+
+/* Margin Between Buttons */
+.mx-2 {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+/* Spacing Between Form Elements */
+.mb-3 {
+  margin-bottom: 20px;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .col-md-6 {
+    margin-top: 30px;
+    padding: 15px;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .form-control {
+    padding: 12px;
+    font-size: 0.95rem;
+  }
+
+  .btn {
+    font-size: 0.9rem;
+  }
+}
+addemp.js.......
+import React, { useState } from "react";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import './Addemp.css'; // Import the custom CSS file
+
+export default function Addemp() {
+  let navigate = useNavigate();
+
+  const [employee, setemp] = useState({
+    name: "",
+    email: "",
+    mobile: "",
+    password: "",
+    country: "",
+  });
+
+  const { name, email , mobile, password ,country} = employee;
+
+  const onInputChange = (e) => {
+    setemp({ ...employee, [e.target.name]: e.target.value });
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    await axios.post("http://localhost:8080/Employee/save", employee);
+    navigate("/");
+  };
+
+  return (
+    <div className="container">
+      <div className="row">
+        <div className="col-md-6 offset-md-3 border rounded p-4 mt-2 shadow">
+          <h2 className="text-center m-4">Register Employee</h2>
+
+          <form onSubmit={(e) => onSubmit(e)}>
+            <div className="mb-3">
+              <label htmlFor="Name" className="form-label">
+                Name
+              </label>
+              <input
+                type={"text"}
+                className="form-control"
+                placeholder="Enter your name"
+                name="name"
+                value={name}
+                onChange={(e) => onInputChange(e)}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="Email" className="form-label">
+                Email
+              </label>
+              <input
+                type={"text"}
+                className="form-control"
+                placeholder="Enter your email"
+                name="email"
+                value={email}
+                onChange={(e) => onInputChange(e)}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="Mobile" className="form-label">
+                Mobile
+              </label>
+              <input
+                type={"text"}
+                className="form-control"
+                placeholder="Enter your mobile"
+                name="mobile"
+                value={mobile}
+                onChange={(e) => onInputChange(e)}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="password" className="form-label">
+                Password
+              </label>
+              <input
+                type={"text"}
+                className="form-control"
+                placeholder="Enter your password"
+                name="password"
+                value={password}
+                onChange={(e) => onInputChange(e)}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="country" className="form-label">
+                Country
+              </label>
+              <input
+                type={"text"}
+                className="form-control"
+                placeholder="Enter your country"
+                name="country"
+                value={country}
+                onChange={(e) => onInputChange(e)}
+              />
+            </div>
+            <button type="submit" className="btn btn-outline-primary">
+              Submit
+            </button>
+            <Link className="btn btn-outline-danger mx-2" to="/">
+              Cancel
+            </Link>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+}

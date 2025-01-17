@@ -955,33 +955,72 @@ export const AuthProvider = ({ children }) => {
   const [authState, setAuthState] = useState({
     isAuthenticated: false,
     user: null,
+    hasAccessedUserList: false, // New flag
   });
 
   const login = (user) => {
-    setAuthState({ isAuthenticated: true, user });
+    setAuthState({ ...authState, isAuthenticated: true, user });
   };
 
   const logout = () => {
-    setAuthState({ isAuthenticated: false, user: null });
+    setAuthState({ isAuthenticated: false, user: null, hasAccessedUserList: false });
+  };
+
+  const accessUserList = () => {
+    setAuthState({ ...authState, hasAccessedUserList: true });
   };
 
   return (
-    <AuthContext.Provider value={{ authState, login, logout }}>
+    <AuthContext.Provider value={{ authState, login, logout, accessUserList }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
 export const useAuth = () => useContext(AuthContext);
-index or app. js..,.................. 
+unauthorized. js.... 
 import React from "react";
-import ReactDOM from "react-dom";
-import { AuthProvider } from "./AuthContext";
-import App from "./App";
 
-ReactDOM.render(
-  <AuthProvider>
-    <App />
-  </AuthProvider>,
-  document.getElementById("root")
-);
+function Unauthorized() {
+  return (
+    <div style={{ textAlign: "center", marginTop: "50px" }}>
+      <h1>403 - Unauthorized</h1>
+      <p>You cannot access this page again.</p>
+    </div>
+  );
+}
+
+export default Unauthorized;
+protected. js..... 
+import React from "react";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "./AuthContext";
+
+function ProtectedRoute({ children }) {
+  const { authState } = useAuth();
+
+  if (!authState.isAuthenticated) {
+    // Redirect to sign-in if the user is not authenticated
+    return <Navigate to="/signin" replace />;
+  }
+
+  return children; // Render the protected component
+}
+
+export default ProtectedRoute;
+app. js..... 
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import SignIn from "./SignIn";
+import UserList from "./UserList";
+import Unauthorized from "./Unauthorized";
+import ProtectedRoute from "./ProtectedRoute";
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        {/* Public Route */}
+        <Route path="/signin" element={<SignIn />} />
+
+        {/* Protected Route: User List

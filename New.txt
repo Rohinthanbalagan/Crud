@@ -801,3 +801,187 @@ a.cancel:hover {
     padding: 8px 16px;
   }
 }
+sigin....... 
+import React, { useState } from "react";
+import { useAuth } from "./AuthContext";
+import "./SignIn.css";
+
+function SignIn() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const { login } = useAuth();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    try {
+      const response = await fetch("http://localhost:8080/api/auth/signin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          login(data.user); // Save user info to global state
+          window.location.href = "/home"; // Redirect to the home page
+        } else {
+          setError(data.message || "Invalid email or password.");
+        }
+      } else {
+        setError("Failed to sign in. Please try again.");
+      }
+    } catch (error) {
+      setError("An error occurred. Please try again.");
+    }
+  };
+
+  return (
+    <div className="signin-container">
+      <form className="signin-form" onSubmit={handleSubmit}>
+        <h2>Sign In</h2>
+        {error && <p className="error-message">{error}</p>}
+        <div className="form-group">
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        <button type="submit" className="signin-button">
+          Sign In
+        </button>
+      </form>
+    </div>
+  );
+}
+
+export default SignIn;
+sign in. css............... 
+.signin-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f4f4f9;
+  padding: 20px;
+}
+
+.signin-form {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 30px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.signin-form h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #555;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 3px rgba(0, 123, 255, 0.5);
+}
+
+.signin-button {
+  width: 100%;
+  padding: 10px 15px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.signin-button:hover {
+  background-color: #0056b3;
+}
+
+.error-message {
+  color: #ff4d4d;
+  font-size: 14px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+AuthContext. js...... 
+import React, { createContext, useState, useContext } from "react";
+
+const AuthContext = createContext();
+
+export const AuthProvider = ({ children }) => {
+  const [authState, setAuthState] = useState({
+    isAuthenticated: false,
+    user: null,
+  });
+
+  const login = (user) => {
+    setAuthState({ isAuthenticated: true, user });
+  };
+
+  const logout = () => {
+    setAuthState({ isAuthenticated: false, user: null });
+  };
+
+  return (
+    <AuthContext.Provider value={{ authState, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = () => useContext(AuthContext);
+index or app. js..,.................. 
+import React from "react";
+import ReactDOM from "react-dom";
+import { AuthProvider } from "./AuthContext";
+import App from "./App";
+
+ReactDOM.render(
+  <AuthProvider>
+    <App />
+  </AuthProvider>,
+  document.getElementById("root")
+);

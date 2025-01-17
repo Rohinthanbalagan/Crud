@@ -55,15 +55,25 @@ export default function Home() {
   );
 }
 home. ss... 
-
-.container {
-  width: 80%;
-  margin: 0 auto;
-  padding: 20px;
+/* General Styles */
+body {
   font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
   color: #333;
 }
 
+.container {
+  max-width: 1200px;
+  margin: 40px auto;
+  background: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+/* Header Styles */
 .header {
   display: flex;
   justify-content: space-between;
@@ -72,18 +82,21 @@ home. ss...
 }
 
 .header h2 {
-  font-size: 24px;
+  font-size: 28px;
+  color: #4CAF50;
   font-weight: bold;
 }
 
 .buttons .btn {
   padding: 10px 20px;
-  margin: 5px;
+  margin-left: 10px;
   text-decoration: none;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
   font-size: 14px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
 }
 
 .add-btn {
@@ -91,35 +104,73 @@ home. ss...
   color: white;
 }
 
+.add-btn:hover {
+  background-color: #45a049;
+}
+
 .logout-btn {
   background-color: #f44336;
   color: white;
 }
 
+.logout-btn:hover {
+  background-color: #d32f2f;
+}
+
+/* Table Styles */
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
 }
 
-table, th, td {
+table th, table td {
+  text-align: left;
+  padding: 12px;
   border: 1px solid #ddd;
 }
 
-th, td {
-  padding: 10px;
-  text-align: left;
+table th {
+  background-color: #f2f2f2;
+  font-size: 16px;
 }
 
-th {
-  background-color: #f2f2f2;
+table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+table tr:hover {
+  background-color: #f1f1f1;
 }
 
 .view-btn {
-  padding: 5px 10px;
-  background-color: #2196F3;
-  color: white;
-  text-decoration: none;
-  border-radius: 5px;
+  padding: 8px 16px;
   font-size: 14px;
+  color: white;
+  background-color: #2196F3;
+  border-radius: 5px;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.view-btn:hover {
+  background-color: #1976d2;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .buttons .btn {
+    margin: 5px 0;
+  }
+
+  table th, table td {
+    font-size: 14px;
+    padding: 8px;
+  }
 }

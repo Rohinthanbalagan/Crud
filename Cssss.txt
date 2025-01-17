@@ -323,3 +323,113 @@ button.submit:hover {
   }
 }
 vie. css....... 
+/* Viewemp.css */
+.container {
+  margin: 20px auto;
+  padding: 20px;
+  max-width: 600px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.card-header {
+  padding: 15px;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.card-body {
+  padding: 15px;
+}
+
+.list-group {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list-group-item {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+  color: #555;
+}
+
+.list-group-item b {
+  color: #333;
+}
+
+.list-group-item:last-child {
+  border-bottom: none;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.button-group a {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  text-decoration: none;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.button-group .primary {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.button-group .primary:hover {
+  background-color: #218838;
+  transform: scale(1.02);
+}
+
+.button-group .secondary {
+  background-color: #ffc107;
+  color: #fff;
+}
+
+.button-group .secondary:hover {
+  background-color: #e0a800;
+  transform: scale(1.02);
+}
+
+.button-group .danger {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.button-group .danger:hover {
+  background-color: #c82333;
+  transform: scale(1.02);
+}
+
+@media screen and (max-width: 600px) {
+  .button-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .button-group a {
+    width: 100%;
+    text-align: center;
+  }
+}
+login. css........ 
